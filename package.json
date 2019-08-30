@@ -1,0 +1,17 @@
+{
+    "name": "ui-start",
+    "version": "1.0.0",
+    "description": "",
+    "main": "electron/main.js",
+    "dependencies": {
+        "electron": "^6.0.5",
+        "electron-is-dev": "^1.1.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "react-start": "cd ui-start-react && npm start",
+        "electron-start": "electron ."
+    },
+    "author": "",
+    "license": "MIT"
+}
