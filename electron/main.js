@@ -1,20 +1,27 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const Event = require('./event');
 
 // 保持window对象的全局引用,避免JavaScript对象被垃圾回收时,窗口被自动关闭.
 let mainWindow;
 
 function createWindow() {
     //创建浏览器窗口,宽高自定义
+    // 800 * 700
     mainWindow = new BrowserWindow({
         width: 1640,
-        height: 960
+        height: 960,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
+
+    new Event(mainWindow);
 
     // 加载应用
     isDev
-        ? mainWindow.loadURL('http://localhost:3000/index.html')
+        ? mainWindow.loadURL('http://localhost:8082/index.html')
         : mainWindow.loadFile(path.join(__dirname, '../react/build/index.html'));
 
     // 开发环境下打开开发者工具

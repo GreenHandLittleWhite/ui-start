@@ -7,10 +7,13 @@
         "electron": "^6.0.5",
         "electron-is-dev": "^1.1.0"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "nodemon": "^1.19.2"
+    },
     "scripts": {
         "react-start": "cd ui-start-react && npm start",
-        "electron-start": "electron ."
+        "electron-start": "electron .",
+        "electron-watch": "nodemon --ignore 'ui-start-react' --exec \"npm run electron-start\""
     },
     "author": "",
     "license": "MIT"

@@ -1,3 +1,55 @@
-.app {
-    text-align: center;
+@import '~antd/lib/style/themes/default.less';
+
+@length-sm: 8px;
+@length-base: 16px;
+
+.appContainer {
+    height: 100%;
+    padding: @padding-md;
+
+    .upload {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 150px;
+        margin-bottom: @length-base;
+        border: 1px dashed @border-color-base;
+        border-radius: @border-radius-base;
+        font-size: @font-size-lg;
+        font-weight: bold;
+        background: @background-color-light;
+        cursor: pointer;
+
+        &:hover {
+            border-color: @primary-color;
+        }
+        .iconInbox {
+            margin-bottom: @length-sm;
+            font-size: 48px;
+            color: @primary-color;
+        }
+        .greyText {
+            color: #ccc;
+        }
+    }
+
+    .main {
+        display: flex;
+        height: calc(~'100% - 166px');
+
+        .sideBar {
+            width: 150px;
+            margin-right: @length-base;
+
+            .btnGroup {
+                display: flex;
+                justify-content: space-between;
+                margin-top: @length-base;
+            }
+        }
+        .terminal {
+            flex: 1;
+        }
+    }
 }
