@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, message, Icon, Select } from 'antd';
 import styles from './App.less';
 const { dialog } = window.require('electron').remote;
 const { ipcRenderer } = window.require('electron');
 const fs = window.require('fs');
-// const path = window.require('path');
 
 const { Option } = Select;
 
@@ -12,6 +11,32 @@ function App() {
     const [scripts, setScripts] = useState([]);
     const [selectedFile, setSelectedFile] = useState('');
     const [selectedValue, setSelectedValue] = useState(undefined);
+    const [startStatus, setStartStatus] = useState(false);
+    const [logs, setLogs] = useState([]);
+
+    useEffect(() => {
+        const addLog = log => {
+            logs.push(log);
+            setLogs([...logs]);
+        };
+
+        ipcRenderer.on('log', (e, log) => {
+            addLog(log);
+        });
+        ipcRenderer.on('error', error => {
+            addLog(error);
+            setStartStatus(false);
+        });
+        ipcRenderer.on('close', () => {
+            addLog('stop');
+            setStartStatus(false);
+        });
+    }, []);
+
+    useEffect(() => {
+        const logContainer = document.querySelector('#log-container');
+        logContainer.scrollTop = logContainer.scrollHeight - logContainer.clientHeight;
+    }, [logs]);
 
     const openDialog = () => {
         dialog
@@ -52,13 +77,13 @@ function App() {
 
     const start = () => {
         if (selectedValue) {
-            console.log(selectedValue);
-            ipcRenderer.send('shell', selectedValue);
+            ipcRenderer.send('shell', selectedValue, selectedFile);
+            setStartStatus(true);
         }
     };
 
     const stop = () => {
-        console.log(selectedValue);
+        ipcRenderer.send('stop', selectedValue);
     };
 
     const renderOptions = () => {
@@ -90,15 +115,31 @@ function App() {
                     </Select>
 
                     <div className={styles.btnGroup}>
-                        <Button type="primary" onClick={start}>
+                        <Button
+                            type="primary"
+                            onClick={start}
+                            disabled={!selectedValue || startStatus}
+                        >
                             启动
                         </Button>
-                        <Button onClick={stop}>停止</Button>
+                        <Button onClick={stop} disabled={!startStatus}>
+                            停止
+                        </Button>
                     </div>
                 </div>
 
                 {/* 右侧控制台输出 */}
-                <div className={styles.terminal}>bbb</div>
+                <div className={styles.terminal}>
+                    <div id="log-container" className={styles.logContainer}>
+                        {logs.map((log, index) => (
+                            <div key={index}>
+                                {log}
+                                <br />
+                                <br />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

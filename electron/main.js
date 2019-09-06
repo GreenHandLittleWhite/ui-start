@@ -8,10 +8,9 @@ let mainWindow;
 
 function createWindow() {
     //创建浏览器窗口,宽高自定义
-    // 800 * 700
     mainWindow = new BrowserWindow({
-        width: 1640,
-        height: 960,
+        width: 800,
+        height: 700,
         webPreferences: {
             nodeIntegration: true
         }
